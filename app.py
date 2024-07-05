@@ -1,16 +1,18 @@
 from flask import Flask, request, render_template
-from flask_cors import cross_origin
+from flask import jsonify
+from flask import json
+from flask_cors import CORS, cross_origin
 import sklearn
 import pickle
 import pandas as pd
 
 app = Flask(__name__)
+CORS(app,  resources={r"/*": {"origins":["http://localhost:3000"]}})
 model = pickle.load(open("flight_rf.pkl", "rb"))
 
 
 
 @app.route("/")
-@cross_origin()
 def home():
     return render_template("home.html")
 
@@ -18,7 +20,6 @@ def home():
 
 
 @app.route("/predict", methods = ["GET", "POST"])
-@cross_origin()
 def predict():
     if request.method == "POST":
 
@@ -347,7 +348,6 @@ def predict():
             s_Delhi,
             s_Kolkata,
             s_Mumbai,
-            d_Cochin,
             d_Delhi,
             d_Hyderabad,
             d_Kolkata,
@@ -356,7 +356,7 @@ def predict():
 
         output=round(prediction[0],2)
 
-        return render_template('home.html',prediction_text="Your Flight price is Rs. {}".format(output))
+        return jsonify({"status": "success", "message": "Your Flight price is","price":"{}".format(output)})
 
 
     return render_template("home.html")
