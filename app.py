@@ -14,7 +14,7 @@ model = pickle.load(open("flight_rf.pkl", "rb"))
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return jsonify({"status": "success", "message": "server is running"})
 
 
 
@@ -359,7 +359,7 @@ def predict():
         return jsonify({"status": "success", "message": "Your Flight price is","price":"{}".format(output)})
 
 
-    return render_template("home.html")
+    return jsonify({"status": "success", "message": "API is Working"})
 
 
 
